@@ -1,0 +1,110 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+
+<div class="row">
+    <div class="col-lg-8">
+        <!-- Post content-->
+        <article>
+            <!-- Post header-->
+            <header class="mb-4">
+                <!-- Post title-->
+                <h1 class="fw-bolder mb-1">{{makale.title}}</h1>
+                <!-- Post meta content-->
+                <p class = "small">Yazar: {{makale.author.username}}</p>
+                <div class="text-muted fst-italic mb-2">{{makale.created_date}}</div>
+            </header>
+            <!-- Preview image figure-->
+
+            {% if makale.article_image %}
+            <figure class="mb-4"><img class="img-fluid rounded" src="{{makale.article_image.url}}" alt="" /></figure>
+            {% endif %}
+
+            <!-- Post content-->
+            <section class="mb-5">
+                <p class = "lead">{{makale.content|safe}}</p>
+            </section>
+        </article>
+    </div>
+    <section class="mb-5">
+        <div class="card bg-light">
+            <div class="card-body">
+                <!-- Comment form-->
+                {% if comments %}
+                
+                <form method = "post" class="mb-4" action="{% url 'article:comment' makale.id %}">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label class="form-label">İsminiz</label>
+                        <input name="comment_author" type="text" class="form-control" placeholder="">
+                      </div>
+                      <div class="mb-3">
+                        <label class="form-label">Yorumunuz</label>
+                        <textarea name="comment_content" class="form-control" rows="3"></textarea>
+                        <br>
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <button class="btn btn-outline-secondary" type="submit">Yorum Ekle</button>
+                          </div>
+                      </div>
+                </form>
+                <h4>Yorumlar</h4>
+                <hr>
+                {% for comment in comments %}
+                
+                <div class="d-flex">
+                    <div class="flex-shrink-0"><img class="rounded-circle" src="https://dummyimage.com/50x50/ced4da/6c757d.jpg" alt="..." /></div>
+                    <div class="ms-3">
+                        <h6 class="fw-bold"><p>{{comment.comment_author}} - {{comment.comment_date}}</p></h6> 
+                        
+                        {{comment.comment_content}}
+                    </div>
+                </div>
+                <br>
+
+                {% endfor %}
+                
+                {% else %}
+
+                
+                <div class ="alert alert-danger">
+                    Bu makaleye herhangi bir yorum yapılmamış. İlk yorum yapan siz olun.
+                </div>
+
+                <form method = "post" class="mb-4" action="{% url 'article:comment' makale.id %}">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label class="form-label">İsminiz</label>
+                        <input name="comment_author" type="text" class="form-control" placeholder="">
+                      </div>
+                      <div class="mb-3">
+                        <label class="form-label">Yorumunuz</label>
+                        <textarea name="comment_content" class="form-control" rows="3"></textarea>
+                        <br>
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <button class="btn btn-outline-secondary" type="submit">Yorum Ekle</button>
+                          </div>
+                      </div>
+                </form>
+
+                
+                
+                {% endif %}
+
+
+                
+                  <br>
+                <!--<button type="submit" class="btn btn-outline-secondary me-md-2">Ekle</button>-->
+
+                <!-- Comment with nested comments-->
+
+
+
+
+
+
+                
+            </div>
+        </div>
+    </section>
+</div>
+{% endblock body %}
